@@ -25,7 +25,7 @@
 <link rel="stylesheet" href="contact.css" media="screen">
     <script class="u-script" type="text/javascript" src="jquery.js" defer=""></script>
     <script class="u-script" type="text/javascript" src="nicepage.js" defer=""></script>
-    <meta name="generator" content="Nicepage 7.9.4, nicepage.com">
+    <meta name="generator" content="Nicepage 8.2.5, nicepage.com">
     <meta name="referrer" content="origin">
     <link rel="icon" href="images/GK_PRODUCTIONS-removebg-preview.png">
     
@@ -33,9 +33,7 @@
     
     
     
-    <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
-    <link id="u-page-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i">
-    <link id="u-header-footer-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Merriweather:300,300i,400,400i,700,700i,900,900i">
+    <link id="u-page-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&amp;family=Merriweather:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900">
     <script type="application/ld+json">{
 		"@context": "http://schema.org",
 		"@type": "Organization",
@@ -50,20 +48,26 @@
     <meta property="og:title" content="GKProducts | Accueil">
     <meta property="og:description" content="">
     <meta property="og:type" content="website">
-  <script>
+  <meta name="referrer" content="origin"><script>
+    window.recaptchaRenderedV2 = false;
+    window.recaptchaFallback = false;
+    window.recaptchaSiteKeyV2 = '6LebRIorAAAAAEBCYCVXLpZKNt1KxwfbefWqDvFL';
+
     function gdprConfirmed() {
         return true;
     }
+
     function dynamicLoadScript() {
         var script = document.createElement('script');
         script.src = 'https://www.google.com/recaptcha/api.js?render=6Ld1hU4rAAAAAHweAJNVlG-HeiSWUMBnP_c5qZbU';
         script.async = true;
-        document.body.appendChild(script);
-        script.onload = function() {
-            let event = new CustomEvent("recaptchaLoaded");
+        script.onload = function () {
+            var event = new CustomEvent("recaptchaLoaded");
             document.dispatchEvent(event);
         };
+        document.body.appendChild(script);
     }
+
     function showRecaptchaError(error) {
         error = error || '';
         var formError = document.querySelector('.u-form-send-error');
@@ -75,13 +79,15 @@
 
         console.error('Error in grecaptcha: ', error);
     }
+
     document.addEventListener('DOMContentLoaded', function () {
-        var confirmButton = document.querySelector('.u-cookies-consent .u-button-confirm');
-        if (confirmButton) {
-            confirmButton.onclick = dynamicLoadScript;
-        }
+        var confirmButtons = document.querySelectorAll('.u-cookies-consent .u-button-confirm');
+        confirmButtons.forEach(function (button) {
+            button.onclick = dynamicLoadScript;
+        });
     });
     </script>
+
     <script>
         document.addEventListener("DOMContentLoaded", function(){
             if (!gdprConfirmed()) {
@@ -90,6 +96,7 @@
             dynamicLoadScript();
         });
     </script>
+
     <script>
         document.addEventListener("recaptchaLoaded", function() {
             if (!gdprConfirmed()) {
@@ -104,30 +111,34 @@
                             return;
                         }
 
-                        grecaptcha.execute(sitekey, {action: action}).then((token) => {
-                            if (!token) {
-                                throw new Error('Empty token received from reCAPTCHA');
-                            }
-
-                            var forms = document.getElementsByTagName('form');
-
-                            for (var i = 0; i < forms.length; i++) {
-                                var response = forms[i].querySelector('[name="recaptchaResponse"]');
-
-                                if (!response) {
-                                    response = document.createElement('input');
-                                    response.setAttribute('type', 'hidden');
-                                    response.setAttribute('name', 'recaptchaResponse');
-                                    forms[i].appendChild(response);
+                        try {
+                            grecaptcha.execute(sitekey, {action: action}).then((token) => {
+                                if (!token) {
+                                    throw new Error('Empty token received from reCAPTCHA');
                                 }
 
-                                response.value = token;
-                            }
+                                var forms = document.getElementsByTagName('form');
 
-                            submitFormCb();
-                        }).catch((e) => {
+                                for (var i = 0; i < forms.length; i++) {
+                                    var response = forms[i].querySelector('[name="recaptchaResponse"]');
+
+                                    if (!response) {
+                                        response = document.createElement('input');
+                                        response.setAttribute('type', 'hidden');
+                                        response.setAttribute('name', 'recaptchaResponse');
+                                        forms[i].appendChild(response);
+                                    }
+
+                                    response.value = token;
+                                }
+
+                                submitFormCb();
+                            }).catch((e) => {
+                                showRecaptchaError(e.message);
+                            });
+                        } catch (e) {
                             showRecaptchaError(e.message);
-                        });
+                        }
                     },
 
                     executeContact: function (submitFormCb) {
@@ -136,6 +147,7 @@
                 };
 
                 window.recaptchaObject = recaptcha;
+                window.grecaptchaObject = grecaptcha;
             })(
                 grecaptcha,
                 
@@ -144,10 +156,106 @@
             );
         });
     </script>
+
+    <script>
+    window.showRecaptchaV2 = function (form) {
+        if (!form || !form.length) {
+            return;
+        }
+        if (typeof window.grecaptchaObject === 'undefined' || !window.grecaptchaObject) {
+            return;
+        }
+
+        const formEl = form[0];
+
+        let container = document.getElementById('recaptcha-v2-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'recaptcha-v2-container';
+            formEl.parentElement.appendChild(container);
+        }
+
+        let tokenReceived = false;
+        let timeoutHandle;
+
+        if (window.recaptchaRenderedV2 === false || typeof window.recaptchaRenderedV2 === 'undefined') {
+            window.recaptchaRenderedV2 = window.grecaptchaObject.render('recaptcha-v2-container', {
+                'sitekey': window.recaptchaSiteKeyV2,
+                'size': 'invisible',
+                'callback': function (token) {
+                    clearTimeout(timeoutHandle);
+
+                    if (!token) {
+                        showRecaptchaError('reCAPTCHA v2 token was empty. Please try again.');
+                        return;
+                    }
+
+                    tokenReceived = true;
+
+                    let recaptchaResponseV2 = formEl.querySelector('input[name="recaptchaResponseV2"]');
+
+                    if (!recaptchaResponseV2) {
+                        recaptchaResponseV2 = document.createElement('input');
+                        recaptchaResponseV2.type = 'hidden';
+                        recaptchaResponseV2.name = 'recaptchaResponseV2';
+                        formEl.appendChild(recaptchaResponseV2);
+                    }
+
+                    recaptchaResponseV2.value = token;
+
+                    if (window.recaptchaSiteKeyV2) {
+                        let siteKeyInput = formEl.querySelector('input[name="siteKey"]');
+
+                        if (siteKeyInput) {
+                            siteKeyInput.value = window.recaptchaSiteKeyV2;
+                        }
+                    }
+
+                    document.querySelectorAll('.u-form-send-error').forEach(el => {
+                        el.style.display = 'none';
+                    });
+
+                    const event = new CustomEvent('submit', {
+                        detail: { recaptchaPassed: true },
+                        bubbles: true,
+                        cancelable: true,
+                    });
+
+                    formEl.dispatchEvent(event);
+                },
+                'error-callback': function () {
+                    clearTimeout(timeoutHandle);
+                    showRecaptchaError('reCAPTCHA v2 error. Please try again.');
+                },
+                'expired-callback': function () {
+                    clearTimeout(timeoutHandle);
+                }
+            });
+
+            window.grecaptchaObject.reset(window.recaptchaRenderedV2);
+
+            setTimeout(() => {
+                window.grecaptchaObject.execute(window.recaptchaRenderedV2);
+            }, 300);
+
+            timeoutHandle = setTimeout(function () {
+                if (!tokenReceived) {
+                    showRecaptchaError('The Contact Form could not be submitted because Google reCAPTCHA v3 detected unusual activity from your connection. Please try again later, or complete the reCAPTCHA v2 challenge if it appears.');
+                }
+            }, 120000);
+        } else {
+            window.grecaptchaObject.reset(window.recaptchaRenderedV2);
+
+            setTimeout(() => {
+                window.grecaptchaObject.execute(window.recaptchaRenderedV2);
+            }, 300);
+        }
+    };
+    </script>
 <meta data-intl-tel-input-cdn-path="intlTelInput/"></head>
-  <body data-path-to-root="./" data-include-products="false" class="u-body u-xxl-mode" data-lang="fr"><!-- Google Tag Manager (noscript) -->
+  <body data-path-to-root="./" data-include-products="false" class="u-body u-clearfix u-xxl-mode" data-lang="fr"><!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=  GTM-WM3R6BSN" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) --><header class="u-clearfix u-grey-90 u-header u-header" id="sec-ef40"><div class="u-clearfix u-sheet u-valign-middle-lg u-valign-middle-md u-valign-middle-xl u-sheet-1">
+<!-- End Google Tag Manager (noscript) --><header class="u-clearfix u-custom-color-3 u-header u-header" id="sec-ef40"><div class="u-clearfix u-sheet u-valign-middle-lg u-valign-middle-md u-valign-middle-xl u-sheet-1">
         <a href="#" class="u-image u-logo u-image-1" data-image-width="500" data-image-height="500">
           <img class="u-logo-image u-logo-image-1" src="images/GK_PRODUCTIONS-removebg-preview.png?rand=d58d">
         </a>
@@ -199,14 +307,14 @@
                 }</style>
         </nav>
       </div></header>
-    <section class="skrollable skrollable-between u-align-center u-clearfix u-container-align-center u-image u-parallax u-section-1" id="sec-890a" src="" data-image-width="1053" data-image-height="702">
+    <section class="skrollable skrollable-between u-align-center u-border-2 u-border-color-var u-border-no-left u-border-no-right u-clearfix u-container-align-center u-image u-parallax u-section-1" id="sec-890a" src="" data-image-width="1053" data-image-height="702">
       <div class="u-clearfix u-sheet u-valign-middle-lg u-valign-middle-md u-valign-middle-sm u-valign-middle-xl u-sheet-1">
         <h1 class="u-align-center u-text u-text-white u-text-1" data-animation-name="customAnimationIn" data-animation-duration="1500">Contactez-MOI</h1>
       </div>
     </section>
-    <section class="u-clearfix u-container-align-center u-grey-90 u-section-2" id="sec-2c0a">
+    <section class="u-border-2 u-border-color-var u-border-no-left u-border-no-right u-border-no-top u-clearfix u-color-var u-container-align-center u-section-2" id="sec-2c0a">
       <div class="u-clearfix u-sheet u-valign-middle-lg u-valign-middle-md u-valign-middle-sm u-valign-middle-xl u-valign-middle-xs u-sheet-1">
-        <h2 class="u-align-center u-text u-text-1">PRENDRE CONTACT POUR UN SHOOTING PHOTO </h2>
+        <h2 class="u-align-center u-text u-text-grey-5 u-text-1">PRENDRE CONTACT POUR UN SHOOTING PHOTO </h2>
         <div class="data-layout-selected u-clearfix u-expanded-width u-layout-wrap u-layout-wrap-1">
           <div class="u-layout">
             <div class="u-layout-row">
@@ -218,9 +326,9 @@
               <div class="u-container-align-left u-container-style u-layout-cell u-shape-rectangle u-size-37 u-layout-cell-2">
                 <div class="u-container-layout u-valign-middle-lg u-valign-middle-md u-valign-middle-sm u-valign-middle-xl u-valign-middle-xs u-container-layout-2">
                   <h5 class="u-align-left u-text u-text-palette-1-base u-text-2"></h5>
-                  <h3 class="u-align-left u-text u-text-3">Horaires pour shooting photo</h3>
+                  <h3 class="u-align-left u-text u-text-grey-5 u-text-3">Horaires pour shoo​ting photo</h3>
                   <div class="u-align-left u-border-2 u-border-palette-1-base u-line u-line-horizontal u-line-1"></div>
-                  <h5 class="u-align-left u-text u-text-4"><b style="">LUN-JEU&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </b>&nbsp; &nbsp;16:00 -&nbsp; 20:00<br style=""><b style="">SAM-DIM</b>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 09:00 - 20:00&nbsp;<br style="">
+                  <h5 class="u-align-left u-text u-text-grey-5 u-text-4"><b style="">LUN-JEU&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </b>&nbsp; &nbsp;16:00 -&nbsp; 20:00<br style=""><b style="">SAM-DIM</b>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 09:00 - 20:00&nbsp;<br style="">
                   </h5>
                   <h6 class="u-align-left u-text u-text-5">Ces horaires peuvent varier, le mieux est d'en convenir directement en me contactant</h6>
                 </div>
@@ -230,13 +338,13 @@
         </div>
       </div>
     </section>
-    <section class="u-align-right u-clearfix u-container-align-right u-shading u-section-3" id="sec-8959" data-image-width="1280" data-image-height="853">
+    <section class="u-align-right u-border-2 u-border-color-var u-border-no-left u-border-no-right u-border-no-top u-clearfix u-container-align-right u-gradient u-section-3" id="sec-8959" data-image-width="1280" data-image-height="853">
       <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
         <div class="u-container-style u-group u-shape-rectangle u-group-1">
           <div class="u-container-layout u-valign-middle-lg u-valign-middle-md u-valign-middle-sm u-valign-middle-xl u-valign-middle-xs u-container-layout-1">
             <h2 class="u-align-center u-text u-text-body-alt-color u-text-default u-text-1">Contactez-moi</h2>
             <div class="custom-expanded u-border-8 u-border-palette-1-base u-form u-form-1">
-              <form action="https://forms.nicepagesrv.com/v2/form/process" class="u-clearfix u-form-spacing-30 u-form-vertical u-inner-form" source="email" name="form" style="padding: 30px;">
+              <form action="https://service.nicepagesrv.com/form/v4/form-process" class="u-clearfix u-form-spacing-30 u-form-vertical u-inner-form" source="email" name="form" style="padding: 30px;">
                 <div class="u-form-group u-form-name">
                   <label for="name-2137" class="u-form-control-hidden u-label"></label>
                   <input type="text" placeholder="Nom" id="name-2137" name="name" class="u-border-2 u-border-no-left u-border-no-right u-border-no-top u-border-palette-1-base u-input u-input-rectangle u-none u-text-body-alt-color" required="">
@@ -267,22 +375,23 @@
     
     
     
-    <footer class="u-align-center u-clearfix u-container-align-center u-footer u-grey-90 u-footer" id="sec-608d"><div class="u-clearfix u-sheet u-sheet-1">
+    <footer class="u-align-center u-clearfix u-color-var u-container-align-center u-footer u-footer" id="sec-608d"><div class="u-clearfix u-sheet u-sheet-1">
         <div class="data-layout-selected u-clearfix u-expanded-width u-layout-wrap u-layout-wrap-1">
           <div class="u-layout">
             <div class="u-layout-row">
               <div class="u-container-style u-layout-cell u-shape-rectangle u-size-20-lg u-size-20-xl u-size-20-xxl u-size-30-md u-size-30-sm u-size-30-xs u-layout-cell-1">
                 <div class="u-container-layout u-valign-top-lg u-valign-top-md u-valign-top-sm u-valign-top-xl u-valign-top-xs u-container-layout-1">
                   <img class="u-image u-image-contain u-image-default u-image-1" src="images/GK_PRODUCTIONS-removebg-preview.png?rand=3afb" alt="" data-image-width="500" data-image-height="500">
-                  <p class="u-align-center u-text u-text-default u-text-1">Photographe basé en Alsace, correspond à tous vos besoins.</p>
-                  <p class="u-align-center u-text u-text-2"><b>LUN-VEN&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</b>16:00 - 20:00<br><b>SAM-DIM</b>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;09:00 - 20:00&nbsp;<br>
+                  <p class="u-align-center u-text u-text-body-alt-color u-text-default u-text-1">Photographe automobile basé en Alsace, correspond à tous vos besoins.</p>
+                  <p class="u-align-center u-text u-text-palette-1-base u-text-2"><b>LUN-VEN&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</b>16:00 - 20:00<br><b>SAM-DIM</b>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;09:00 - 20:00&nbsp;<br>
                   </p>
                 </div>
               </div>
               <div class="u-container-align-center u-container-style u-layout-cell u-shape-rectangle u-size-20-lg u-size-20-xl u-size-20-xxl u-size-30-md u-size-30-sm u-size-30-xs u-layout-cell-2">
                 <div class="u-container-layout u-valign-top-lg u-valign-top-sm u-valign-top-xl u-valign-top-xs u-container-layout-2">
                   <img class="u-image u-image-default u-image-2" src="images/bandiera-alsazia-drapeau-alsace-flag.jpg" alt="" data-image-width="1200" data-image-height="800">
-                  <p class="u-align-center u-text u-text-3"> Haguenau, Alsace, France<br>
+                  <p class="u-align-center u-text u-text-3"><span class="u-text-body-alt-color"> Haguenau, Alsace, France</span>
+                    <br>
                     <br>
                     <a href="mailto:contact@gkproducts.fr" class="u-active-none u-border-none u-btn u-button-link u-button-style u-hover-none u-none u-text-active-white u-text-hover-white u-text-palette-1-base u-btn-1">contact@gkproducts.fr</a>
                     <br>
@@ -299,8 +408,8 @@
               </div>
               <div class="u-container-style u-layout-cell u-shape-rectangle u-size-20-lg u-size-20-xl u-size-20-xxl u-size-60-md u-size-60-sm u-size-60-xs u-layout-cell-3">
                 <div class="u-container-layout u-valign-top-lg u-valign-top-md u-valign-top-sm u-valign-top-xl u-valign-top-xs u-container-layout-3"><span class="u-align-center u-file-icon u-icon u-icon-2"><img src="images/733585.png" alt=""></span>
-                  <h4 class="u-align-center u-text u-text-4"> Questions?</h4>
-                  <p class="u-align-center u-text u-text-5">Ecrivez-moi directement sur WhatsApp</p>
+                  <h4 class="u-align-center u-text u-text-body-alt-color u-text-4"> Questions?</h4>
+                  <p class="u-align-center u-text u-text-body-alt-color u-text-5">Ecrivez-moi directement sur WhatsApp</p>
                   <a href="tel:+33660932242" class="u-active-white u-align-center u-border-none u-btn u-button-style u-custom u-hover-white u-palette-1-base u-text-active-black u-text-hover-black u-btn-3">06 60 93 22 42 </a>
                 </div>
               </div>
@@ -308,7 +417,7 @@
           </div>
         </div>
         <div class="u-border-1 u-border-grey-50 u-line u-line-horizontal u-line-1"></div>
-        <p class="u-small-text u-text u-text-variant u-text-6">GK Productions</p>
+        <p class="u-small-text u-text u-text-palette-1-base u-text-variant u-text-6">GK Productions</p>
       </div></footer>
   
 </body></html>

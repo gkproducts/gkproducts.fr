@@ -1,6 +1,7 @@
  .u-section-1 {
   background-image: url("images/3eb9d8f7-2875-44e3-880a-f8461c0f8c4b.jpg");
   background-size: cover;
+  --border-color-var: #b9c1cc80;
 }
 
 .u-section-1 .u-sheet-1 {
@@ -76,7 +77,12 @@
     width: auto;
     margin: 198px 0 52px;
   }
-}.u-section-2 .u-sheet-1 {
+} .u-section-2 {
+  --color-var: #000017;
+  --border-color-var: #b9c1cc80;
+}
+
+.u-section-2 .u-sheet-1 {
   min-height: 578px;
 }
 
@@ -249,10 +255,11 @@
     font-size: 1.5rem;
   }
 } .u-section-3 {
-  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 1));
+  background-image: linear-gradient(rgb(0, 0, 23), rgb(0, 0, 23));
   background-position: 50% 50%;
   background-repeat: no-repeat;
   background-size: cover;
+  --border-color-var: #b9c1cc80;
 }
 
 .u-section-3 .u-sheet-1 {
